@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {chats} from '../data/chats';
 import ChatListItem from './ChatListItem';
@@ -10,18 +10,20 @@ export default function ChatList() {
       <Headers
         headerText="Chats"
         headerTextStyle={{fontWeight: 400, fontSize: 20}}
-        iconName="ellipsis-h"
+        iconName="ellipsis"
         iconStyle={{color: '#000', fontSize: 20}}
       />
-      {chats.map((chat, idx) => (
-        <ChatListItem
-          key={idx}
-          name={chat.name}
-          profilePhoto={chat.profilePhoto}
-          lastmsg={chat.lastmsg}
-          lastmsgTime={chat.lastmsgTime}
-        />
-      ))}
+      <ScrollView>
+        {chats.map((chat, idx) => (
+          <ChatListItem
+            key={idx}
+            name={chat.name}
+            profilePhoto={chat.profilePhoto}
+            lastmsg={chat.lastmsg}
+            lastmsgTime={chat.lastmsgTime}
+          />
+        ))}
+      </ScrollView>
     </View>
   );
 }
