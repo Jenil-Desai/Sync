@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     height: 70,
+    backgroundColor: '#FFF',
   },
   newContainer: {
     width: 200,

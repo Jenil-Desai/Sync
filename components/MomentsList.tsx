@@ -6,7 +6,10 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 
 export default function MomentsList() {
   return (
-    <ScrollView style={styles.momentListContainer} horizontal={true}>
+    <ScrollView
+      style={styles.momentListContainer}
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}>
       <View style={styles.newMomentContainer}>
         <View style={styles.newMomentButton}>
           <Icon name="plus" size={20} color={'#000'} />

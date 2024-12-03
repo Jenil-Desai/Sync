@@ -1,8 +1,8 @@
 import React from 'react';
 import {
   SafeAreaView,
-  ScrollView,
   StyleSheet,
+  useColorScheme,
   View,
   Dimensions,
 } from 'react-native';
@@ -26,15 +26,14 @@ function App(): React.JSX.Element {
             iconStyle={styles.headerIcon}
           />
         </View>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollViewContent}>
-          <View style={styles.contentContainer}>
+        <View style={styles.contentContainer}>
+          <View>
             <MomentsList />
+          </View>
+          <View>
             <ChatList />
           </View>
-        </ScrollView>
+        </View>
       </SafeAreaView>
       <View style={styles.bottomNavContainer}>
         <BottomNavigationBar />
@@ -65,15 +64,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#666666',
   },
-  scrollView: {
-    flex: 1,
-  },
-  scrollViewContent: {
-    flexGrow: 1,
-  },
   contentContainer: {
     flex: 1,
     padding: 15,
+    zIndex: 0,
   },
   bottomNavContainer: {
     height: height * 0.1,
