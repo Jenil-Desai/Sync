@@ -21,6 +21,7 @@ export default function ChatList() {
             profilePhoto={chat.profilePhoto}
             lastmsg={chat.lastmsg}
             lastmsgTime={chat.lastmsgTime}
+            msgCount={chat.msgCount}
           />
         ))}
       </ScrollView>

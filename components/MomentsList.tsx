@@ -14,7 +14,11 @@ export default function MomentsList() {
         <Text style={styles.newMomentText}>Moment</Text>
       </View>
       {chats.map((chat, idx) => (
-        <MomentItem profilePhoto={chat.profilePhoto} userName={chat.name} />
+        <MomentItem
+          profilePhoto={chat.profilePhoto}
+          userName={chat.name}
+          key={idx}
+        />
       ))}
     </ScrollView>
   );
@@ -22,7 +26,6 @@ export default function MomentsList() {
 
 const styles = StyleSheet.create({
   momentListContainer: {
-    marginTop: 25,
     marginBottom: 10,
   },
   newMomentContainer: {

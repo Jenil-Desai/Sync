@@ -15,8 +15,12 @@ export default function ChatListItem(chat: Chat) {
           </Text>
         </View>
         <View style={styles.secondaryDetails}>
-          <Text>{chat.lastmsg.slice(0, 40) + '...'}</Text>
-          <Text style={styles.msgCount}>1</Text>
+          <Text>{chat.lastmsg.slice(0, 35) + '...'}</Text>
+          {chat.msgCount > 0 && (
+            <View style={styles.msgCountContainer}>
+              <Text style={styles.msgCount}>{chat.msgCount}</Text>
+            </View>
+          )}
         </View>
       </View>
     </View>
@@ -27,7 +31,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    padding: 16,
+    padding: 10,
     marginBottom: 10,
   },
   profileImage: {
@@ -62,13 +66,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 4,
   },
-  msgCount: {
-    textAlign: 'center',
+  msgCountContainer: {
     justifyContent: 'center',
-    alignContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#FDC604',
-    width: 20,
+    width: 40,
     height: 20,
     borderRadius: 20 / 2,
+  },
+  msgCount: {
+    fontSize: 12,
   },
 });
