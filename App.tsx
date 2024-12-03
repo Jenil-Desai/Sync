@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import ChatListItem from './components/ChatListItem';
 import Headers from './components/Headers';
+import ChatList from './components/ChatList';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -32,13 +32,7 @@ function App(): React.JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Headers
-            headerText="Sync"
-            headerTextStyle={{fontWeight: 500, fontSize: 30}}
-            iconName="search"
-            iconStyle={{color: '#000', fontSize: 30}}
-          />
-          <ChatListItem />
+          <ChatList />
         </View>
       </ScrollView>
     </SafeAreaView>
