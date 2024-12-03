@@ -4,12 +4,12 @@ import {chats} from '../data/chats';
 import ChatListItem from './ChatListItem';
 import Headers from './Headers';
 
-const {width, height} = Dimensions.get('window');
+const {width, height} = Dimensions.get('screen');
 
 export default function ChatList() {
   return (
     <View>
-      <View style={{height: height * 0.05}}>
+      <View style={{height: height * 0.06}}>
         <Headers
           headerText="Chats"
           headerTextStyle={{fontWeight: 400, fontSize: 20}}
@@ -17,7 +17,9 @@ export default function ChatList() {
           iconStyle={{color: '#000', fontSize: 20}}
         />
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{height: height * 0.6}}>
         {chats.map((chat, idx) => (
           <ChatListItem
             key={idx}

@@ -6,7 +6,7 @@ export interface Chat {
   msgCount: number;
 }
 
-export const chats = [
+export const chats: Chat[] = [
   {
     name: 'Skip Bims',
     profilePhoto: 'https://placehold.co/60@3x.png?font=raleway',

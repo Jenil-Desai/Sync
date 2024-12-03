@@ -15,7 +15,7 @@ export default function ChatListItem(chat: Chat) {
           </Text>
         </View>
         <View style={styles.secondaryDetails}>
-          <Text>{chat.lastmsg.slice(0, 35) + '...'}</Text>
+          <Text>{chat.lastmsg.slice(0, 29) + '...'}</Text>
           {chat.msgCount > 0 && (
             <View style={styles.msgCountContainer}>
               <Text style={styles.msgCount}>{chat.msgCount}</Text>
