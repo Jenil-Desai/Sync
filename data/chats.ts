@@ -1,6 +1,6 @@
 export interface Chat {
   name: string;
-  profilePhoto?: string;
+  profilePhoto: string;
   lastmsg?: string;
   lastmsgTime?: string;
   msgCount: number;
@@ -9,8 +9,7 @@ export interface Chat {
 export const chats: Chat[] = [
   {
     name: 'Skip Bims',
-    profilePhoto:
-      Math.random() > 0.3 ? 'https://avatar.iran.liara.run/public' : undefined,
+    profilePhoto: `https://api.dicebear.com/9.x/dylan/svg?seed=Jack&flip=true&radius=50&backgroundColor=29e051,619eff,ffa6e6,b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=solid,gradientLinear&facialHairProbability=0`,
     lastmsg:
       Math.random() > 0.2
         ? 'Vivamus in felis eu sapien cursus vestibulum. Proin eu mi. Nulla ac enim.'
@@ -20,8 +19,7 @@ export const chats: Chat[] = [
   },
   {
     name: 'Hallie Spenclay',
-    profilePhoto:
-      Math.random() > 0.3 ? 'https://avatar.iran.liara.run/public' : undefined,
+    profilePhoto: `https://api.dicebear.com/9.x/dylan/svg?seed=Leo&flip=true&radius=50&backgroundColor=29e051,619eff,ffa6e6,b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=solid,gradientLinear&facialHairProbability=0`,
     lastmsg:
       Math.random() > 0.2
         ? 'Curabitur convallis. Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor.'
@@ -31,8 +29,7 @@ export const chats: Chat[] = [
   },
   {
     name: 'Moritz Norquay',
-    profilePhoto:
-      Math.random() > 0.3 ? 'https://avatar.iran.liara.run/public' : undefined,
+    profilePhoto: `https://api.dicebear.com/9.x/dylan/svg?seed=Sarah&flip=true&radius=50&backgroundColor=29e051,619eff,ffa6e6,b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=solid,gradientLinear&facialHairProbability=0`,
     lastmsg:
       Math.random() > 0.2
         ? 'Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus.'
@@ -42,8 +39,7 @@ export const chats: Chat[] = [
   },
   {
     name: 'Adore Guiness',
-    profilePhoto:
-      Math.random() > 0.3 ? 'https://avatar.iran.liara.run/public' : undefined,
+    profilePhoto: `https://api.dicebear.com/9.x/dylan/svg?seed=Chase&flip=true&radius=50&backgroundColor=29e051,619eff,ffa6e6,b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=solid,gradientLinear&facialHairProbability=0`,
     lastmsg:
       Math.random() > 0.2
         ? 'Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros. Vestibulum ac est lacinia nisi venenatis tristique.'
@@ -53,8 +49,7 @@ export const chats: Chat[] = [
   },
   {
     name: 'Niel Gales',
-    profilePhoto:
-      Math.random() > 0.3 ? 'https://avatar.iran.liara.run/public' : undefined,
+    profilePhoto: `https://api.dicebear.com/9.x/dylan/svg?seed=Vivian&flip=true&radius=50&backgroundColor=29e051,619eff,ffa6e6,b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=solid,gradientLinear&facialHairProbability=0`,
     lastmsg:
       Math.random() > 0.2
         ? 'Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia.'
@@ -64,8 +59,7 @@ export const chats: Chat[] = [
   },
   {
     name: 'Olympie Chastagnier',
-    profilePhoto:
-      Math.random() > 0.3 ? 'https://avatar.iran.liara.run/public' : undefined,
+    profilePhoto: `https://api.dicebear.com/9.x/dylan/svg?seed=Jameson&flip=true&radius=50&backgroundColor=29e051,619eff,ffa6e6,b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=solid,gradientLinear&facialHairProbability=0`,
     lastmsg:
       Math.random() > 0.2
         ? 'Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo.'
@@ -75,8 +69,7 @@ export const chats: Chat[] = [
   },
   {
     name: 'Lilyan Swires',
-    profilePhoto:
-      Math.random() > 0.3 ? 'https://avatar.iran.liara.run/public' : undefined,
+    profilePhoto: `https://api.dicebear.com/9.x/dylan/svg?seed=Liam&flip=true&radius=50&backgroundColor=29e051,619eff,ffa6e6,b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=solid,gradientLinear&facialHairProbability=0`,
     lastmsg:
       Math.random() > 0.2
         ? 'Nunc nisl. Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi.'
@@ -86,8 +79,7 @@ export const chats: Chat[] = [
   },
   {
     name: 'Ring Copplestone',
-    profilePhoto:
-      Math.random() > 0.3 ? 'https://avatar.iran.liara.run/public' : undefined,
+    profilePhoto: `https://api.dicebear.com/9.x/dylan/svg?seed=Valentina&flip=true&radius=50&backgroundColor=29e051,619eff,ffa6e6,b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=solid,gradientLinear&facialHairProbability=0`,
     lastmsg:
       Math.random() > 0.2
         ? 'Etiam pretium iaculis justo. In hac habitasse platea dictumst.'
@@ -97,8 +89,7 @@ export const chats: Chat[] = [
   },
   {
     name: 'Rodi Gaize',
-    profilePhoto:
-      Math.random() > 0.3 ? 'https://avatar.iran.liara.run/public' : undefined,
+    profilePhoto: `https://api.dicebear.com/9.x/dylan/svg?seed=Emery&flip=true&radius=50&backgroundColor=29e051,619eff,ffa6e6,b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=solid,gradientLinear&facialHairProbability=0`,
     lastmsg:
       Math.random() > 0.2
         ? 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.'
@@ -108,8 +99,7 @@ export const chats: Chat[] = [
   },
   {
     name: 'Lara Yourell',
-    profilePhoto:
-      Math.random() > 0.3 ? 'https://avatar.iran.liara.run/public' : undefined,
+    profilePhoto: `https://api.dicebear.com/9.x/dylan/svg?seed=Nolan&flip=true&radius=50&backgroundColor=29e051,619eff,ffa6e6,b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc&backgroundType=solid,gradientLinear&facialHairProbability=0`,
     lastmsg:
       Math.random() > 0.2
         ? 'Suspendisse ornare consequat lectus. In est risus, auctor sed.'

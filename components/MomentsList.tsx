@@ -30,10 +30,7 @@ export default function MomentsList() {
       </View>
       {chats.map((chat, idx) => (
         <MomentItem
-          profilePhoto={
-            chat.profilePhoto ??
-            `https://avatar.iran.liara.run/public/?username=[${chat.name}]`
-          }
+          profilePhoto={chat.profilePhoto}
           userName={chat.name}
           key={idx}
         />

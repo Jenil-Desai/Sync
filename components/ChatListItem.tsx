@@ -8,17 +8,7 @@ export default function ChatListItem(chat: Chat) {
   const isDarkMode = useIsDarkMode();
   return (
     <View style={styles.container}>
-      <Image
-        source={{
-          uri:
-            chat.profilePhoto ??
-            `https://avatar.iran.liara.run/public/?username=[${chat.name.replace(
-              ' ',
-              '+',
-            )}]`,
-        }}
-        style={styles.profileImage}
-      />
+      <Image source={{uri: chat.profilePhoto}} style={styles.profileImage} />
       <View style={styles.chatDetails}>
         <View style={styles.primaryDetails}>
           <Text style={isDarkMode ? styles.darkUserName : styles.lightUserName}>

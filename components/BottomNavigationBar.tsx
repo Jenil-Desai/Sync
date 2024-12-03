@@ -14,7 +14,7 @@ export default function BottomNavigationBar() {
       <Icon name="house" size={20} color={isDarkMode ? '#FFF' : '#000'} />
       <TouchableOpacity
         style={isDarkMode ? styles.darkNewContainer : styles.lightNewContainer}>
-        <Icon name="plus" size={20} color={isDarkMode ? '#FFF' : '#000'} />
+        <Icon name="plus" size={20} color={isDarkMode ? '#000' : '#FFF'} />
         <Text
           style={isDarkMode ? styles.darkNewChatText : styles.lightNewChatText}>
           New Chat
