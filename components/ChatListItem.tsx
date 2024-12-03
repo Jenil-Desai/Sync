@@ -2,21 +2,39 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Chat} from '../data/chats';
 import moment from 'moment';
+import {useIsDarkMode} from '../utils/useDarkMode';
 
 export default function ChatListItem(chat: Chat) {
+  const isDarkMode = useIsDarkMode();
   return (
     <View style={styles.container}>
-      <Image source={{uri: chat.profilePhoto}} style={styles.profileImage} />
+      <Image
+        source={{
+          uri:
+            chat.profilePhoto ??
+            `https://avatar.iran.liara.run/public/?username=[${chat.name.replace(
+              ' ',
+              '+',
+            )}]`,
+        }}
+        style={styles.profileImage}
+      />
       <View style={styles.chatDetails}>
         <View style={styles.primaryDetails}>
-          <Text style={styles.userName}>{chat.name}</Text>
-          <Text style={styles.msgTime}>
+          <Text style={isDarkMode ? styles.darkUserName : styles.lightUserName}>
+            {chat.name}
+          </Text>
+          <Text style={isDarkMode ? styles.darkMsgTime : styles.lightMsgTime}>
             {moment(chat.lastmsgTime).format('HH:MM A').toString()}
           </Text>
         </View>
         <View style={styles.secondaryDetails}>
-          <Text>{chat.lastmsg.slice(0, 29) + '...'}</Text>
-          {chat.msgCount > 0 && (
+          {chat.lastmsg && (
+            <Text style={{color: isDarkMode ? '#FFF' : '#000'}}>
+              {chat.lastmsg.slice(0, 29) + '...'}
+            </Text>
+          )}
+          {chat.lastmsg && (
             <View style={styles.msgCountContainer}>
               <Text style={styles.msgCount}>{chat.msgCount}</Text>
             </View>
@@ -50,11 +68,24 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  userName: {
+  lightUserName: {
+    color: '#000',
     fontSize: 17,
     fontWeight: 500,
   },
-  msgTime: {
+  darkUserName: {
+    color: '#FFF',
+    fontSize: 17,
+    fontWeight: 500,
+  },
+  lightMsgTime: {
+    color: '#000',
+    fontSize: 10,
+    fontWeight: 500,
+    opacity: 0.5,
+  },
+  darkMsgTime: {
+    color: '#FFF',
     fontSize: 10,
     fontWeight: 500,
     opacity: 0.5,

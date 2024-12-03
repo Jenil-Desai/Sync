@@ -11,19 +11,29 @@ import Headers from './components/Headers';
 import ChatList from './components/ChatList';
 import MomentsList from './components/MomentsList';
 import BottomNavigationBar from './components/BottomNavigationBar';
+import {useIsDarkMode} from './utils/useDarkMode';
 
 const {width, height} = Dimensions.get('window');
 
 function App(): React.JSX.Element {
+  const isDarkMode = useIsDarkMode();
+  const backgroundColor = {
+    backgroundColor: isDarkMode ? '#212529' : '#FFF',
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, backgroundColor]}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.headerContainer}>
           <Headers
             headerText="Sync"
-            headerTextStyle={styles.headerText}
+            headerTextStyle={
+              isDarkMode ? styles.darkHeaderText : styles.lightHeaderText
+            }
             iconName="magnifying-glass"
-            iconStyle={styles.headerIcon}
+            iconStyle={
+              isDarkMode ? styles.darkHeaderIcon : styles.lightHeaderIcon
+            }
           />
         </View>
         <View style={styles.contentContainer}>
@@ -45,7 +55,6 @@ function App(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
   },
   safeArea: {
     flex: 1,
@@ -55,14 +64,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 15,
   },
-  headerText: {
+  lightHeaderText: {
     fontSize: 24,
     fontWeight: '600',
     color: '#333333',
   },
-  headerIcon: {
+  darkHeaderText: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  lightHeaderIcon: {
     fontSize: 24,
     color: '#666666',
+  },
+  darkHeaderIcon: {
+    fontSize: 24,
+    color: '#fff',
   },
   contentContainer: {
     flex: 1,
