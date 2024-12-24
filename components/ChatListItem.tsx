@@ -5,8 +5,8 @@ import { Chat } from "@/constants/Chats";
 
 export default function ChatListItem(chat: Chat) {
   return (
-    <View className="flex flex-row px-5 mb-2 flex-1">
-      <Image source={{ uri: chat.profilePhoto }} className="w-20 h-20 rounded-full mr-2" />
+    <View className="flex flex-row px-5 mb-4 flex-1">
+      <Image source={{ uri: chat.profilePhoto }} className="rounded-full mr-2" style={{ width: 55, height: 55 }} />
       <View className="flex justify-center flex-1">
         <View className="flex flex-row justify-between items-center">
           <Text className="font-semibold">{chat.name}</Text>
@@ -15,7 +15,7 @@ export default function ChatListItem(chat: Chat) {
         <View className="flex flex-row justify-between items-center mt-2">
           {chat.lastmsg && <Text>{chat.lastmsg.slice(0, 29) + "..."}</Text>}
           {chat.lastmsg && (
-            <View className="justify-center items-center bg-[#FDC604] rounded-full w-6 h-6">
+            <View className="justify-center items-center bg-[#FDC604] rounded-full w-5 h-5">
               <Text className="text-xs">{chat.msgCount}</Text>
             </View>
           )}
