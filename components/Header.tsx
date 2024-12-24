@@ -1,4 +1,4 @@
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome as FontAwesomeType } from "@expo/vector-icons";
 import { StyleProp, Text, TextStyle, View } from "react-native";
 
