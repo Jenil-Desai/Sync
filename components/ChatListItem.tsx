@@ -5,10 +5,10 @@ import { Chat } from "@/constants/Chats";
 
 export default function ChatListItem(chat: Chat) {
   return (
-    <View className="flex flex-row px-6 mb-2">
+    <View className="flex flex-row px-5 mb-2 flex-1">
       <Image source={{ uri: chat.profilePhoto }} className="w-20 h-20 rounded-full mr-2" />
-      <View className="flex justify-center w-[80%]">
-        <View className="flex flex-row justify-between items-center w-full">
+      <View className="flex justify-center flex-1">
+        <View className="flex flex-row justify-between items-center">
           <Text className="font-semibold">{chat.name}</Text>
           <Text className="font-normal opacity-50 text-sm">{moment(chat.lastmsgTime).format("HH:MM A").toString()}</Text>
         </View>

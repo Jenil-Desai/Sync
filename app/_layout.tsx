@@ -1,26 +1,17 @@
-import { useFonts } from "expo-font";
 import { Slot } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
-import "react-native-reanimated";
-import "../global.css";
+import React from "react";
+import { SafeAreaView } from "react-native";
 
-SplashScreen.preventAutoHideAsync();
+import "../global.css";
+import Header from "@/components/Header";
+import BottomNavigationBar from "@/components/BottomNavigationBar";
 
 export default function RootLayout() {
-  const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  return <Slot />;
+  return (
+    <SafeAreaView className="flex-1">
+      <Header title={"Sync"} titleStyle={"font-bold text-3xl"} icon={"magnifier"} iconSize={24} />
+      <Slot />
+      <BottomNavigationBar />
+    </SafeAreaView>
+  );
 }
