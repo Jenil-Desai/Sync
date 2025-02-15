@@ -2,7 +2,7 @@ import { Slot, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, Text } from "react-native";
 
-import Header from "@/components/Header";
+import Header from "@/components/headers/Header";
 import BottomNavigationBar from "@/components/BottomNavigationBar";
 import MenuModal from "@/components/MenuModal";
 import { supabase } from "@/libs/supabase";

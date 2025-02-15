@@ -1,5 +1,5 @@
 import ChatListItem from "@/components/ChatListItem";
-import Header from "@/components/Header";
+import Header from "@/components/headers/Header";
 import Moment from "@/components/Moment";
 import { dummyChats } from "@/constants/Chats";
 import { supabase } from "@/libs/supabase";
@@ -20,12 +20,16 @@ export default function Home() {
     if (currentUser.user) {
       const { data, error } = await supabase
         .from("chats")
-        .select("*")
+        .select(
+          "*, user1Details:user1 (id,fullname), user2Details:user2 (id,fullname)"
+        )
         .or(`user1.eq.${currentUser.user.id},user2.eq.${currentUser.user.id}`);
 
       if (!error) setChats(data);
     }
   };
+
+  if (chats) console.log(chats);
 
   return (
     <View className="flex-1 flex-grow">
@@ -67,9 +71,10 @@ export default function Home() {
         data={chats}
         renderItem={({ item }) => (
           <ChatListItem
-            name={item.name}
+            id={item.id}
+            name={item.user1Details.fullname}
             profilePhoto={"https://i.pravatar.cc/300"}
-            lastmsg={"item.lastmsg"}
+            lastmsg={"Last Message"}
             msgCount={Math.floor(Math.random() * 11)}
           />
         )}

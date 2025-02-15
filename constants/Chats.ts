@@ -1,4 +1,5 @@
 export interface Chat {
+  id: string;
   name: string;
   profilePhoto: string;
   lastmsg?: string;
@@ -8,6 +9,7 @@ export interface Chat {
 
 export const dummyChats: Chat[] = [
   {
+    id: "",
     name: "Skip Bims",
     profilePhoto: "https://i.pravatar.cc/300",
     lastmsg:
@@ -18,6 +20,7 @@ export const dummyChats: Chat[] = [
     msgCount: Math.floor(Math.random() * 11),
   },
   {
+    id: "",
     name: "Hallie Spenclay",
     profilePhoto: "https://i.pravatar.cc/300",
     lastmsg:
@@ -28,6 +31,7 @@ export const dummyChats: Chat[] = [
     msgCount: Math.floor(Math.random() * 11),
   },
   {
+    id: "",
     name: "Moritz Norquay",
     profilePhoto: "https://i.pravatar.cc/300",
     lastmsg:
@@ -38,6 +42,7 @@ export const dummyChats: Chat[] = [
     msgCount: Math.floor(Math.random() * 11),
   },
   {
+    id: "",
     name: "Adore Guiness",
     profilePhoto: "https://i.pravatar.cc/300",
     lastmsg:
@@ -48,6 +53,7 @@ export const dummyChats: Chat[] = [
     msgCount: Math.floor(Math.random() * 11),
   },
   {
+    id: "",
     name: "Niel Gales",
     profilePhoto: "https://i.pravatar.cc/300",
     lastmsg:
@@ -58,6 +64,7 @@ export const dummyChats: Chat[] = [
     msgCount: Math.floor(Math.random() * 11),
   },
   {
+    id: "",
     name: "Olympie Chastagnier",
     profilePhoto: "https://i.pravatar.cc/300",
     lastmsg:
@@ -68,6 +75,7 @@ export const dummyChats: Chat[] = [
     msgCount: Math.floor(Math.random() * 11),
   },
   {
+    id: "",
     name: "Lilyan Swires",
     profilePhoto: "https://i.pravatar.cc/300",
     lastmsg:
@@ -78,6 +86,7 @@ export const dummyChats: Chat[] = [
     msgCount: Math.floor(Math.random() * 11),
   },
   {
+    id: "",
     name: "Ring Copplestone",
     profilePhoto: "https://i.pravatar.cc/300",
     lastmsg:
@@ -88,6 +97,7 @@ export const dummyChats: Chat[] = [
     msgCount: Math.floor(Math.random() * 11),
   },
   {
+    id: "",
     name: "Rodi Gaize",
     profilePhoto: "https://i.pravatar.cc/300",
     lastmsg:
@@ -98,6 +108,7 @@ export const dummyChats: Chat[] = [
     msgCount: Math.floor(Math.random() * 11),
   },
   {
+    id: "",
     name: "Lara Yourell",
     profilePhoto: "https://i.pravatar.cc/300",
     lastmsg:

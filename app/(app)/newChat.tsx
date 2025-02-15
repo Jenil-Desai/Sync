@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, useRouter } from "expo-router";
 import { supabase } from "@/libs/supabase";
+import { createChat } from "@/utils/supabaseFunctions";
 
 export default function NewChatScreen() {
   const [email, setEmail] = useState("");
@@ -37,6 +38,37 @@ export default function NewChatScreen() {
         },
       ]);
     }
+
+    const { data: existingUser, error: chatError } = await supabase
+      .from("users")
+      .select("id")
+      .eq("email", email)
+      .single();
+
+    if (chatError) {
+      setLoading(false);
+      return Alert.alert("Error", chatError.message, [
+        {
+          text: "Ok",
+          style: "default",
+        },
+      ]);
+    }
+
+    const { chat, error } = await createChat(existingUser.id);
+
+    if (error) {
+      setLoading(false);
+      console.log(error);
+      return Alert.alert("Error", "Error While Creating Chat", [
+        {
+          text: "Ok",
+          style: "default",
+        },
+      ]);
+    }
+
+    router.replace(`/(app)/chats/${chat.id}`);
 
     setLoading(false);
   }

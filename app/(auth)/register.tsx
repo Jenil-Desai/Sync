@@ -83,6 +83,7 @@ export default function RegisterScreen() {
       return Alert.alert("Error While Sign In", error.message);
     } else {
       const { error } = await supabase.from("users").insert({
+        id: data.user?.id,
         fullname: fullName,
         email: email,
       });
