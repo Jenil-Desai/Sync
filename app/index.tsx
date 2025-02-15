@@ -1,25 +1,80 @@
-import ChatListItem from "@/components/ChatListItem";
-import Header from "@/components/Header";
-import Moment from "@/components/Moment";
-import { chats } from "@/constants/Chats";
-import { SimpleLineIcons } from "@expo/vector-icons";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { supabase } from "@/libs/supabase";
+import { User } from "@supabase/supabase-js";
 
-export default function Home() {
+export default function WelcomeScreen() {
+  const [user, setUser] = useState<User | null>();
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    setLoading(true);
+    async function getUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false);
+
+      if (user) {
+        return router.replace("/(app)/home");
+      }
+    }
+
+    getUser();
+  }, []);
+
+  function createAccountBtn() {
+    router.push("/(auth)/register");
+  }
+
+  function signInBtn() {
+    router.push("/(auth)/login");
+  }
+
+  // if (loading) return null;
+
   return (
-    <View className="flex-1 flex-grow">
-      <View className="flex flex-row justify-start items-center">
-        <TouchableOpacity className="mb-10 pr-2 pl-4">
-          <View className="w-21 h-21 p-8 rounded-full border-2 border-slate-200 border-dashed flex flex-row justify-center items-center">
-            <SimpleLineIcons name="plus" size={20} color={"gray"} />
-          </View>
-          <Text className="text-center">Moment</Text>
-        </TouchableOpacity>
-        <FlatList horizontal={true} showsHorizontalScrollIndicator={false} data={chats} renderItem={({ item }) => <Moment profilePhoto={item.profilePhoto} userName={item.name} />} keyExtractor={(item) => item.profilePhoto + Math.random().toString()} />
+    <SafeAreaView className="flex-1 flex justify-evenly items-center bg-white">
+      <View className="bg-black p-7 rounded-3xl">
+        <Ionicons name="sync" color={"white"} size={58} />
       </View>
-
-      <Header title={"Chats"} titleStyle={"font-medium text-2xl"} icon={"options"} iconSize={24} />
-      <FlatList showsVerticalScrollIndicator={false} data={chats} renderItem={({ item }) => <ChatListItem name={item.name} profilePhoto={item.profilePhoto} lastmsg={item.lastmsg} msgCount={item.msgCount} />} keyExtractor={(item) => item.profilePhoto + Math.random().toString()} />
-    </View>
+      <View>
+        <Text className="text-center font-bold text-4xl">Welcome To Sync</Text>
+        <Text className="text-center text-gray-500 font-semibold">
+          Stay connected, chat seamlessly
+        </Text>
+      </View>
+      <View className="gap-3">
+        <TouchableOpacity
+          className="bg-black px-28 py-5 rounded-lg"
+          onPress={createAccountBtn}
+        >
+          <Text className="text-white text-center font-semibold text-lg">
+            Create Account
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="bg-gray-300 px-28 py-5 rounded-lg"
+          onPress={signInBtn}
+        >
+          <Text className="text-black text-center font-semibold text-lg">
+            Sign In
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({});
