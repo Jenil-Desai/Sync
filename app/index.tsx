@@ -42,7 +42,13 @@ export default function WelcomeScreen() {
     router.push("/(auth)/login");
   }
 
-  // if (loading) return null;
+  if (loading) {
+    return (
+      <SafeAreaView className="flex-1 bg-white">
+        <Text className="text-center">Loading...</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 flex justify-evenly items-center bg-white">

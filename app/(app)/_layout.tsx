@@ -1,6 +1,6 @@
 import { Slot, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, Text } from "react-native";
 
 import Header from "@/components/Header";
 import BottomNavigationBar from "@/components/BottomNavigationBar";
@@ -28,6 +28,8 @@ export default function RootLayout() {
       }
     }
 
+    getUser();
+
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user || null);
@@ -42,7 +44,13 @@ export default function RootLayout() {
     };
   }, []);
 
-  // if (loading) return null;
+  if (loading) {
+    return (
+      <SafeAreaView className="flex-1 bg-white">
+        <Text className="text-center">Loading...</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-white">
