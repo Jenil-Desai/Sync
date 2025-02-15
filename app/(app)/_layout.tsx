@@ -8,7 +8,7 @@ import MenuModal from "@/components/MenuModal";
 import { supabase } from "@/libs/supabase";
 import { User } from "@supabase/supabase-js";
 
-export default function RootLayout() {
+export default function AppLayout() {
   const [user, setUser] = useState<User | null>();
   const [loading, setLoading] = useState(false);
 
@@ -54,12 +54,6 @@ export default function RootLayout() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <Header
-        title={"Sync"}
-        titleStyle={"font-bold text-3xl"}
-        icon={"magnifier"}
-        iconSize={24}
-      />
       <Slot />
       <MenuModal />
       <BottomNavigationBar />
