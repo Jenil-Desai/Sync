@@ -2,40 +2,14 @@ import ChatListItem from "@/components/ChatListItem";
 import Header from "@/components/headers/Header";
 import Moment from "@/components/Moment";
 import { dummyChats } from "@/constants/Chats";
-import { supabase } from "@/libs/supabase";
+import { useChats } from "@/hooks/useChats";
+import { useUser } from "@/hooks/useUser";
 import { SimpleLineIcons } from "@expo/vector-icons";
-import React from "react";
-import { useEffect, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 export default function Home() {
-  const [chats, setChats] = useState<any[]>([]);
-  const [userId, setUserId] = useState<string>("");
-
-  const getUser = async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (!error) setUserId(data?.user?.id);
-  };
-
-  useEffect(() => {
-    fetchChats();
-    getUser();
-  }, []);
-
-  const fetchChats = async () => {
-    const { data: currentUser } = await supabase.auth.getUser();
-
-    if (currentUser.user) {
-      const { data, error } = await supabase
-        .from("chats")
-        .select(
-          "*, user1Details:user1 (id,fullname), user2Details:user2 (id,fullname)"
-        )
-        .or(`user1.eq.${currentUser.user.id},user2.eq.${currentUser.user.id}`);
-
-      if (!error) setChats(data);
-    }
-  };
+  const { user: currentUser, loading: currentUserLoading } = useUser();
+  const { chats, loading: chatsLoading } = useChats();
 
   return (
     <View className="flex-1 flex-grow">
@@ -79,16 +53,20 @@ export default function Home() {
           <ChatListItem
             id={item.id}
             name={
-              item.user1 === userId
+              item.user1 === currentUser?.id
                 ? item.user2Details.fullname
                 : item.user1Details.fullname
             }
-            profilePhoto={"https://i.pravatar.cc/300"}
+            profilePhoto={
+              item.user1 === currentUser?.id
+                ? item.user2Details.fullname
+                : item.user1Details.fullname
+            }
             lastmsg={"Last Message"}
             msgCount={Math.floor(Math.random() * 11)}
           />
         )}
-        keyExtractor={(item) => item.profilePhoto + Math.random().toString()}
+        keyExtractor={(item) => item.id}
       />
     </View>
   );
