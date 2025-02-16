@@ -2,44 +2,65 @@ import { User } from "@supabase/supabase-js";
 import { supabase } from "@/libs/supabase";
 import { useState, useEffect } from "react";
 
+interface UserDetails {
+  id: string;
+  fullname: string;
+  profile_photo: string;
+  profile_photo_url: string;
+  email: string;
+}
+
+type LoadingState = {
+  user: null;
+  userDetails: null;
+  loading: true;
+};
+
+type LoadedState = {
+  user: User;
+  userDetails: UserDetails | null;
+  loading: false;
+};
+
+type UserState = LoadingState | LoadedState;
+
 export const useUser = () => {
-  type LoadingState = {
-    user: null;
-    loading: true;
-  };
-
-  type LoadedState = {
-    user: User | null; // Changed to allow null for error cases
-    loading: false;
-  };
-
-  type UserState = LoadingState | LoadedState;
-
   const [state, setState] = useState<UserState>({
     user: null,
+    userDetails: null,
     loading: true,
   });
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchUserAndDetails = async () => {
       try {
-        const { data, error } = await supabase.auth.getUser();
+        const {
+          data: { user },
+          error: authError,
+        } = await supabase.auth.getUser();
 
-        if (error) {
-          setState({ user: null, loading: false });
+        if (authError || !user) {
+          setState({ user: null, userDetails: null, loading: false });
           return;
         }
 
+        const { data: userDetails, error: detailsError } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", user.id)
+          .single();
+
         setState({
-          user: data.user,
+          user,
+          userDetails: detailsError ? null : userDetails,
           loading: false,
         });
       } catch (error) {
-        setState({ user: null, loading: false });
+        setState({ user: null, userDetails: null, loading: false });
       }
     };
 
-    fetchUser();
+    fetchUserAndDetails();
   }, []);
 
   return state;

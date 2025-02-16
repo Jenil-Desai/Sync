@@ -11,6 +11,12 @@ export default function Home() {
   const { user: currentUser, loading: currentUserLoading } = useUser();
   const { chats, loading: chatsLoading } = useChats();
 
+  if (currentUserLoading || chatsLoading) {
+    return <Text>Loading...</Text>;
+  }
+
+  console.log("chats", chats);
+
   return (
     <View className="flex-1 flex-grow">
       <Header
@@ -59,8 +65,8 @@ export default function Home() {
             }
             profilePhoto={
               item.user1 === currentUser?.id
-                ? item.user2Details.fullname
-                : item.user1Details.fullname
+                ? item.user2Details.profile_photo_url
+                : item.user1Details.profile_photo_url
             }
             lastmsg={"Last Message"}
             msgCount={Math.floor(Math.random() * 11)}

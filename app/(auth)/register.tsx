@@ -12,6 +12,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { Link, useRouter } from "expo-router";
 import { supabase } from "@/libs/supabase";
 
+export const DEFAULT_AVATAR_URL = `${process.env.EXPO_PUBLIC_SUPABASE_URL}/storage/v1/object/public/user_profile_photos/default-avatar.png`;
+
 export default function RegisterScreen() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -86,6 +88,8 @@ export default function RegisterScreen() {
         id: data.user?.id,
         fullname: fullName,
         email: email,
+        profile_photo: "default-avatar.png",
+        profile_photo_url: DEFAULT_AVATAR_URL,
       });
       if (error) {
         return Alert.alert("Error While Sign In", error.message);

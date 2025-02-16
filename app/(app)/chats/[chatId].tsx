@@ -33,7 +33,7 @@ export default function ChatScreen() {
     <View className="flex-1 bg-white text-slate-200">
       <ChatScreenHeader
         name={otherUser.fullname}
-        profilePhotoUrl={otherUser.profile_photo}
+        profilePhotoUrl={otherUser.profile_photo_url}
         status={"online"}
       />
       <GiftedChat

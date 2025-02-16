@@ -15,7 +15,7 @@ export default function ChatListItem(chat: Chat) {
     <TouchableOpacity onPress={handleOnPress}>
       <View className="flex flex-row px-5 mb-4 flex-1">
         <Image
-          source={{ uri: chat.profilePhoto || "https://i.pravatar.cc/300" }}
+          source={{ uri: chat.profilePhoto }}
           className="rounded-full mr-2"
           style={{ width: 55, height: 55 }}
         />

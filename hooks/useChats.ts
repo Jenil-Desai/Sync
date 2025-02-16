@@ -10,11 +10,13 @@ export interface ChatData {
     id: string;
     fullname: string;
     profile_photo: string;
+    profile_photo_url: string;
   };
   user2Details: {
     id: string;
     fullname: string;
     profile_photo: string;
+    profile_photo_url: string;
   };
 }
 
@@ -41,9 +43,7 @@ export const useChat = (chatId: string) => {
       try {
         const { data, error } = await supabase
           .from("chats")
-          .select(
-            "*, user1Details:user1 (id,fullname), user2Details:user2 (id,fullname)"
-          )
+          .select("*, user1Details:user1 (*), user2Details:user2 (*)")
           .eq("id", chatId)
           .single();
 
@@ -96,9 +96,7 @@ export const useChats = () => {
       try {
         const { data, error } = await supabase
           .from("chats")
-          .select(
-            "*, user1Details:user1 (id,fullname), user2Details:user2 (id,fullname)"
-          )
+          .select("*, user1Details:user1 (*), user2Details:user2 (*)")
           .or(`user1.eq.${user.id},user2.eq.${user.id}`);
 
         setState({

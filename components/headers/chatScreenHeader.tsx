@@ -28,7 +28,7 @@ export default function ChatScreenHeader({
         </TouchableOpacity>
         <View className="flex flex-row justify-between items-center">
           <Image
-            source={{ uri: profilePhotoUrl || "https://i.pravatar.cc/300" }}
+            source={{ uri: profilePhotoUrl }}
             className="rounded-full mr-2"
             style={{ width: 50, height: 50 }}
           />
