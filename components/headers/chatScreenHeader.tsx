@@ -9,7 +9,11 @@ interface ChatScreenHeaderProps {
   status: "online" | "offline";
 }
 
-export default function ChatScreenHeader() {
+export default function ChatScreenHeader({
+  profilePhotoUrl,
+  name,
+  status,
+}: ChatScreenHeaderProps) {
   const router = useRouter();
 
   function handleBackBtn() {
@@ -24,14 +28,14 @@ export default function ChatScreenHeader() {
         </TouchableOpacity>
         <View className="flex flex-row justify-between items-center">
           <Image
-            source={{ uri: "https://i.pravatar.cc/300" }}
+            source={{ uri: profilePhotoUrl || "https://i.pravatar.cc/300" }}
             className="rounded-full mr-2"
             style={{ width: 50, height: 50 }}
           />
           <View className="flex justify-between items-left">
-            <Text className="text-left text-lg font-semibold">John Doe</Text>
+            <Text className="text-left text-lg font-semibold">{name}</Text>
             <Text className="text-left font-normal opacity-50 text-sm">
-              online
+              {status}
             </Text>
           </View>
         </View>

@@ -5,9 +5,25 @@ import ChatScreenHeader from "@/components/headers/chatScreenHeader";
 import { GiftedChat, Bubble, IMessage } from "react-native-gifted-chat";
 import { supabase } from "@/libs/supabase";
 import { Text } from "react-native";
+import { Colors } from "@/constants/Colors";
+
+interface ChatData {
+  id: string;
+  user1: string;
+  user2: string;
+  user1Details: {
+    id: string;
+    fullname: string;
+  };
+  user2Details: {
+    id: string;
+    fullname: string;
+  };
+}
 
 export default function ChatScreen() {
   const { chatId } = useLocalSearchParams();
+  const [chat, setChat] = useState<ChatData | null>();
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [userId, setUserId] = useState<string>("");
 
@@ -47,6 +63,18 @@ export default function ChatScreen() {
   };
 
   const fetchMessages = async () => {
+    const { data: chatData, error: chatError } = await supabase
+      .from("chats")
+      .select(
+        "*, user1Details:user1 (id,fullname), user2Details:user2 (id,fullname)"
+      )
+      .eq("id", chatId)
+      .single();
+
+    if (!chatError && chatData) {
+      setChat(chatData);
+    }
+
     const { data, error } = await supabase
       .from("messages")
       .select("*")
@@ -85,7 +113,23 @@ export default function ChatScreen() {
 
   return (
     <View className="flex-1 bg-white text-slate-200">
-      <ChatScreenHeader />
+      {chat ? (
+        <ChatScreenHeader
+          name={
+            chat.user1 === userId
+              ? chat.user2Details.fullname
+              : chat.user1Details.fullname
+          }
+          profilePhotoUrl={
+            chat.user1 === userId
+              ? chat.user2Details.fullname
+              : chat.user1Details.fullname
+          }
+          status={"online"}
+        />
+      ) : (
+        <Text>Loading</Text>
+      )}
       {userId ? (
         <GiftedChat
           messages={messages}
@@ -114,10 +158,10 @@ export default function ChatScreen() {
 
 const styles = StyleSheet.create({
   senderBubble: {
-    backgroundColor: "#facc15",
+    backgroundColor: Colors.MD_LAVENDAR,
   },
   receiverBubble: {
-    backgroundColor: "#E2E8F0",
+    backgroundColor: Colors.LT_LAVENDAR,
   },
   senderText: {
     color: "#000",

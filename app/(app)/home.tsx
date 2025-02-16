@@ -4,14 +4,22 @@ import Moment from "@/components/Moment";
 import { dummyChats } from "@/constants/Chats";
 import { supabase } from "@/libs/supabase";
 import { SimpleLineIcons } from "@expo/vector-icons";
+import React from "react";
 import { useEffect, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 export default function Home() {
   const [chats, setChats] = useState<any[]>([]);
+  const [userId, setUserId] = useState<string>("");
+
+  const getUser = async () => {
+    const { data, error } = await supabase.auth.getUser();
+    if (!error) setUserId(data?.user?.id);
+  };
 
   useEffect(() => {
     fetchChats();
+    getUser();
   }, []);
 
   const fetchChats = async () => {
@@ -28,8 +36,6 @@ export default function Home() {
       if (!error) setChats(data);
     }
   };
-
-  if (chats) console.log(chats);
 
   return (
     <View className="flex-1 flex-grow">
@@ -72,7 +78,11 @@ export default function Home() {
         renderItem={({ item }) => (
           <ChatListItem
             id={item.id}
-            name={item.user1Details.fullname}
+            name={
+              item.user1 === userId
+                ? item.user2Details.fullname
+                : item.user1Details.fullname
+            }
             profilePhoto={"https://i.pravatar.cc/300"}
             lastmsg={"Last Message"}
             msgCount={Math.floor(Math.random() * 11)}

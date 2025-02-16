@@ -10,6 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "@/libs/supabase";
 import { User } from "@supabase/supabase-js";
+import { Colors } from "@/constants/Colors";
 
 export default function WelcomeScreen() {
   const [user, setUser] = useState<User | null>();
@@ -52,7 +53,7 @@ export default function WelcomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 flex justify-evenly items-center bg-white">
-      <View className="bg-black p-7 rounded-3xl">
+      <View className="bg-custom-lavendar-dark p-7 rounded-3xl">
         <Ionicons name="sync" color={"white"} size={58} />
       </View>
       <View>
@@ -63,7 +64,7 @@ export default function WelcomeScreen() {
       </View>
       <View className="gap-3">
         <TouchableOpacity
-          className="bg-black px-28 py-5 rounded-lg"
+          className="bg-custom-lavendar-dark px-28 py-5 rounded-lg"
           onPress={createAccountBtn}
         >
           <Text className="text-white text-center font-semibold text-lg">
@@ -71,7 +72,7 @@ export default function WelcomeScreen() {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="bg-gray-300 px-28 py-5 rounded-lg"
+          className="bg-custom-lavendar-light px-28 py-5 rounded-lg"
           onPress={signInBtn}
         >
           <Text className="text-black text-center font-semibold text-lg">

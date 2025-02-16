@@ -115,9 +115,9 @@ export default function RegisterScreen() {
             </Text>
             <TextInput
               style={styles.inputField}
-              className="w-full bg-slate-600 px-3 rounded-lg text-lg font-semibold text-white"
+              className="w-full bg-custom-lavendar-light px-3 rounded-lg text-lg font-semibold text-black"
               placeholder="Enter your full name"
-              placeholderTextColor={"white"}
+              placeholderTextColor={"black"}
               onChangeText={handleFullNameChange}
               value={fullName}
               editable={!loading}
@@ -129,9 +129,9 @@ export default function RegisterScreen() {
             </Text>
             <TextInput
               style={styles.inputField}
-              className="w-full bg-slate-600 px-3 rounded-lg text-lg font-semibold text-white"
+              className="w-full bg-custom-lavendar-light px-3 rounded-lg text-lg font-semibold text-black"
               placeholder="Enter your email"
-              placeholderTextColor={"white"}
+              placeholderTextColor={"black"}
               keyboardType="email-address"
               onChangeText={handleEmailChange}
               value={email}
@@ -144,9 +144,9 @@ export default function RegisterScreen() {
             </Text>
             <TextInput
               style={styles.inputField}
-              className="w-full bg-slate-600 px-3 rounded-lg text-lg font-semibold text-white"
+              className="w-full bg-custom-lavendar-light px-3 rounded-lg text-lg font-semibold text-black"
               placeholder="Enter your password"
-              placeholderTextColor={"white"}
+              placeholderTextColor={"black"}
               secureTextEntry={true}
               onChangeText={handlePasswordChange}
               value={password}
@@ -161,7 +161,7 @@ export default function RegisterScreen() {
             </Text>
           </Link>
           <TouchableOpacity
-            className="bg-black px-28 py-5 rounded-lg"
+            className="bg-custom-lavendar-dark px-28 py-5 rounded-lg"
             onPress={signInBtn}
             disabled={loading}
           >
