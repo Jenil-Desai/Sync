@@ -38,64 +38,48 @@ export default function RegisterScreen() {
     setPassword(value);
   }
 
+  // Update the signInBtn function
   async function signInBtn() {
     setLoading(true);
 
-    if (fullName.length <= 0 || !fullName) {
-      setLoading(false);
-      return Alert.alert("Error", "Name Is Required", [
-        {
-          text: "Ok",
-          style: "default",
-        },
-      ]);
-    }
-
-    if (email.length <= 0 || !email) {
-      setLoading(false);
-      return Alert.alert("Error", "Email Is Required", [
-        {
-          text: "Ok",
-          style: "default",
-        },
-      ]);
-    }
-
-    if (password.length < 8 || !password) {
-      setLoading(false);
-      return Alert.alert(
-        "Error",
-        "Password Should Be Atleast 8 Character Long",
-        [
-          {
-            text: "Ok",
-            style: "default",
-          },
-        ]
-      );
-    }
-
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    });
-
-    setLoading(false);
-    if (error) {
-      return Alert.alert("Error While Sign In", error.message);
-    } else {
-      const { error } = await supabase.from("users").insert({
-        id: data.user?.id,
-        fullname: fullName,
-        email: email,
-        profile_photo: "default-avatar.png",
-        profile_photo_url: DEFAULT_AVATAR_URL,
-      });
-      if (error) {
-        return Alert.alert("Error While Sign In", error.message);
-      } else {
-        return router.replace("/(app)/home");
+    try {
+      // Input validation
+      if (!fullName.trim()) {
+        throw new Error("Name Is Required");
       }
+
+      if (!email.trim()) {
+        throw new Error("Email Is Required");
+      }
+
+      if (password.length < 8) {
+        throw new Error("Password Should Be Atleast 8 Character Long");
+      }
+
+      // Sign up with Supabase Auth including metadata
+      const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            full_name: fullName,
+            profile_photo: "default-avatar.png",
+            profile_photo_url: DEFAULT_AVATAR_URL,
+          },
+        },
+      });
+
+      if (error) throw error;
+      if (!data.user) throw new Error("User creation failed");
+
+      router.replace("/(app)/home");
+    } catch (error: any) {
+      Alert.alert(
+        "Registration Error",
+        error.message || "An error occurred during registration"
+      );
+    } finally {
+      setLoading(false);
     }
   }
 

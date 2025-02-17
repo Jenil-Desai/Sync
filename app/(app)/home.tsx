@@ -68,8 +68,9 @@ export default function Home() {
                 ? item.user2Details.profile_photo_url
                 : item.user1Details.profile_photo_url
             }
-            lastmsg={"Last Message"}
-            msgCount={Math.floor(Math.random() * 11)}
+            lastmsg={item.lastMessage?.message}
+            lastmsgTime={item.lastMessage?.created_at}
+            msgCount={item.unseenCount === 0 ? null : item.unseenCount}
           />
         )}
         keyExtractor={(item) => item.id}

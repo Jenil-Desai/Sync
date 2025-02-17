@@ -12,8 +12,7 @@ import { useUser } from "@/hooks/useUser";
 import { supabase } from "@/libs/supabase";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import { Colors } from "@/constants/Colors";
-import ChangeDetailsScreenHeader from "@/components/headers/ChangeDetailsScreenHeader";
+import ChangeDetailsScreenHeader from "@/components/headers/changeDetailsScreenHeader";
 
 export default function ChangeDetails() {
   const { user, userDetails, loading } = useUser();

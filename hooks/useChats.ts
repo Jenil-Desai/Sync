@@ -18,6 +18,11 @@ export interface ChatData {
     profile_photo: string;
     profile_photo_url: string;
   };
+  lastMessage: {
+    message: string;
+    created_at: string;
+  } | null;
+  unseenCount: number;
 }
 
 export const useChat = (chatId: string) => {
@@ -38,22 +43,45 @@ export const useChat = (chatId: string) => {
     loading: true,
   });
 
+  const { user } = useUser();
+
   useEffect(() => {
     const fetchChat = async () => {
       try {
-        const { data, error } = await supabase
+        const { data: chatData, error: chatError } = await supabase
           .from("chats")
           .select("*, user1Details:user1 (*), user2Details:user2 (*)")
           .eq("id", chatId)
           .single();
 
-        if (error || !data) {
+        if (chatError || !chatData) {
           setState({ chat: null, loading: true });
           return;
         }
 
+        // Fetch last message
+        const { data: messageData } = await supabase
+          .from("messages")
+          .select("content, created_at")
+          .eq("chat_id", chatId)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .single();
+
+        // Fetch unseen messages count
+        const { count } = await supabase
+          .from("messages")
+          .select("id", { count: "exact", head: true })
+          .eq("chat_id", chatId)
+          .eq("seen", false)
+          .neq("sender_id", user?.id);
+
         setState({
-          chat: data as ChatData,
+          chat: {
+            ...chatData,
+            lastMessage: messageData,
+            unseenCount: count || 0,
+          } as ChatData,
           loading: false,
         });
       } catch (error) {
@@ -94,13 +122,44 @@ export const useChats = () => {
       }
 
       try {
-        const { data, error } = await supabase
+        const { data: chatsData, error: chatsError } = await supabase
           .from("chats")
           .select("*, user1Details:user1 (*), user2Details:user2 (*)")
           .or(`user1.eq.${user.id},user2.eq.${user.id}`);
 
+        if (chatsError || !chatsData) {
+          setState({ chats: [], loading: false });
+          return;
+        }
+
+        // Fetch last messages and unseen counts for all chats
+        const enhancedChats = await Promise.all(
+          chatsData.map(async (chat) => {
+            const { data: messageData } = await supabase
+              .from("messages")
+              .select("message, created_at")
+              .eq("chat_id", chat.id)
+              .order("created_at", { ascending: false })
+              .limit(1)
+              .single();
+
+            const { count } = await supabase
+              .from("messages")
+              .select("id", { count: "exact", head: true })
+              .eq("chat_id", chat.id)
+              .eq("seen", false)
+              .neq("sender_id", user.id);
+
+            return {
+              ...chat,
+              lastMessage: messageData,
+              unseenCount: count || 0,
+            };
+          })
+        );
+
         setState({
-          chats: error ? [] : (data as ChatData[]),
+          chats: enhancedChats as ChatData[],
           loading: false,
         });
       } catch (error) {
@@ -109,6 +168,86 @@ export const useChats = () => {
     };
 
     fetchChats();
+
+    // Subscribe to new chats
+    const chatsSubscription = supabase
+      .channel("chats_channel")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "chats",
+          filter: `user1.eq.${user?.id}.or.user2.eq.${user?.id}`,
+        },
+        () => {
+          fetchChats(); // Refresh all chats when a new chat is created
+        }
+      )
+      .subscribe();
+
+    // Subscribe to new messages
+    const messagesSubscription = supabase
+      .channel("messages_channel")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "messages",
+        },
+        async (payload) => {
+          const chatId = payload.new.chat_id;
+
+          // Update the specific chat with new message
+          setState((prevState) => {
+            const updatedChats = prevState.chats.map((chat) => {
+              if (chat.id === chatId) {
+                return {
+                  ...chat,
+                  lastMessage: {
+                    message: payload.new.message,
+                    created_at: payload.new.created_at,
+                  },
+                  unseenCount:
+                    chat.unseenCount +
+                    (payload.new.sender_id !== user?.id ? 1 : 0),
+                } as ChatData;
+              }
+              return chat;
+            });
+
+            return {
+              chats: updatedChats,
+              loading: false,
+            } as LoadedState;
+          });
+        }
+      )
+      .subscribe();
+
+    // Subscribe to message seen status changes
+    const seenSubscription = supabase
+      .channel("seen_channel")
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "messages",
+          filter: "seen.eq.true",
+        },
+        () => {
+          fetchChats(); // Refresh all chats when messages are marked as seen
+        }
+      )
+      .subscribe();
+
+    return () => {
+      chatsSubscription.unsubscribe();
+      messagesSubscription.unsubscribe();
+      seenSubscription.unsubscribe();
+    };
   }, [user]);
 
   return state;

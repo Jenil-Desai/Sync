@@ -28,7 +28,7 @@ export default function ChatListItem(chat: Chat) {
           </View>
           <View className="flex flex-row justify-between items-center mt-2">
             {chat.lastmsg && <Text>{chat.lastmsg.slice(0, 29) + "..."}</Text>}
-            {chat.lastmsg && (
+            {chat.msgCount && (
               <View className="justify-center items-center bg-custom-lavendar-light rounded-full w-5 h-5">
                 <Text className="text-xs">{chat.msgCount}</Text>
               </View>

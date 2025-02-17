@@ -4,7 +4,7 @@ export interface Chat {
   profilePhoto: string;
   lastmsg?: string;
   lastmsgTime?: string;
-  msgCount: number;
+  msgCount: number | null;
 }
 
 export const dummyChats: Chat[] = [
