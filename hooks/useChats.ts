@@ -1,6 +1,9 @@
 import { supabase } from "@/libs/supabase";
 import { useState, useEffect } from "react";
 import { useUser } from "./useUser";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import NetInfo from "@react-native-community/netinfo";
+import { cacheMessages, getCachedMessages } from "@/utils/offileCache";
 
 export interface ChatData {
   id: string;
@@ -95,6 +98,8 @@ export const useChat = (chatId: string) => {
   return state;
 };
 
+const CACHE_KEY_CHATS = "cached_chats";
+
 export const useChats = () => {
   type LoadingState = {
     chats: never[];
@@ -113,35 +118,62 @@ export const useChats = () => {
     loading: true,
   });
   const { user } = useUser();
+  const [isOnline, setIsOnline] = useState(true);
 
-  useEffect(() => {
-    const fetchChats = async () => {
-      if (!user) {
-        setState({ chats: [], loading: false });
-        return;
+  // Function to cache data
+  const cacheData = async (key: string, data: any) => {
+    try {
+      await AsyncStorage.setItem(key, JSON.stringify(data));
+    } catch (error) {
+      console.error("Error caching data:", error);
+    }
+  };
+
+  const fetchChats = async () => {
+    if (!user) {
+      setState({ chats: [], loading: false });
+      return;
+    }
+
+    try {
+      // Try loading from cache first
+      const cachedChats = await AsyncStorage.getItem(CACHE_KEY_CHATS);
+      if (cachedChats) {
+        setState({
+          chats: JSON.parse(cachedChats),
+          loading: false,
+        });
       }
 
-      try {
+      // Only fetch from network if online
+      if (isOnline) {
         const { data: chatsData, error: chatsError } = await supabase
           .from("chats")
           .select("*, user1Details:user1 (*), user2Details:user2 (*)")
           .or(`user1.eq.${user.id},user2.eq.${user.id}`);
 
-        if (chatsError || !chatsData) {
-          setState({ chats: [], loading: false });
-          return;
-        }
+        if (chatsError || !chatsData) return;
 
-        // Fetch last messages and unseen counts for all chats
         const enhancedChats = await Promise.all(
           chatsData.map(async (chat) => {
-            const { data: messageData } = await supabase
-              .from("messages")
-              .select("message, created_at")
-              .eq("chat_id", chat.id)
-              .order("created_at", { ascending: false })
-              .limit(1)
-              .single();
+            // First check cache for messages
+            let cachedMessages = await getCachedMessages(chat.id);
+            let lastMessage = cachedMessages[0];
+
+            // If online, fetch latest message and update cache
+            if (isOnline) {
+              const { data: messageData } = await supabase
+                .from("messages")
+                .select("message, created_at, sender_id")
+                .eq("chat_id", chat.id)
+                .order("created_at", { ascending: false })
+                .limit(20);
+
+              if (messageData && messageData.length > 0) {
+                await cacheMessages(chat.id, messageData);
+                lastMessage = messageData[0];
+              }
+            }
 
             const { count } = await supabase
               .from("messages")
@@ -152,103 +184,138 @@ export const useChats = () => {
 
             return {
               ...chat,
-              lastMessage: messageData,
+              lastMessage,
               unseenCount: count || 0,
             };
           })
+        );
+
+        // Update cache with fresh data
+        await AsyncStorage.setItem(
+          CACHE_KEY_CHATS,
+          JSON.stringify(enhancedChats)
         );
 
         setState({
           chats: enhancedChats as ChatData[],
           loading: false,
         });
-      } catch (error) {
-        setState({ chats: [], loading: false });
       }
-    };
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+    }
+  };
+
+  useEffect(() => {
+    // Monitor network connectivity
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsOnline(state.isConnected ?? false);
+    });
 
     fetchChats();
 
-    // Subscribe to new chats
-    const chatsSubscription = supabase
-      .channel("chats_channel")
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "chats",
-          filter: `user1.eq.${user?.id}.or.user2.eq.${user?.id}`,
-        },
-        () => {
-          fetchChats(); // Refresh all chats when a new chat is created
-        }
-      )
-      .subscribe();
+    // Only set up subscriptions if online
+    if (isOnline) {
+      // Subscribe to new chats
+      const chatsSubscription = supabase
+        .channel("chats_channel")
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "chats",
+            filter: `user1.eq.${user?.id}.or.user2.eq.${user?.id}`,
+          },
+          () => {
+            fetchChats(); // Refresh all chats when a new chat is created
+          }
+        )
+        .subscribe();
 
-    // Subscribe to new messages
-    const messagesSubscription = supabase
-      .channel("messages_channel")
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "messages",
-        },
-        async (payload) => {
-          const chatId = payload.new.chat_id;
+      // Modify message subscription to cache new messages
+      const messagesSubscription = supabase
+        .channel("messages_channel")
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "messages",
+          },
+          async (payload) => {
+            const chatId = payload.new.chat_id;
 
-          // Update the specific chat with new message
-          setState((prevState) => {
-            const updatedChats = prevState.chats.map((chat) => {
-              if (chat.id === chatId) {
-                return {
-                  ...chat,
-                  lastMessage: {
-                    message: payload.new.message,
-                    created_at: payload.new.created_at,
-                  },
-                  unseenCount:
-                    chat.unseenCount +
-                    (payload.new.sender_id !== user?.id ? 1 : 0),
-                } as ChatData;
-              }
-              return chat;
+            // Update messages cache
+            const cachedMessages = await getCachedMessages(chatId);
+            cachedMessages.unshift(payload.new);
+            await cacheMessages(chatId, cachedMessages);
+
+            setState((prevState) => {
+              const updatedChats = prevState.chats.map((chat) => {
+                if (chat.id === chatId) {
+                  const updatedChat = {
+                    ...chat,
+                    lastMessage: {
+                      message: payload.new.message,
+                      created_at: payload.new.created_at,
+                    },
+                    unseenCount:
+                      chat.unseenCount +
+                      (payload.new.sender_id !== user?.id ? 1 : 0),
+                  } as ChatData;
+
+                  // Cache the updated chat
+                  cacheData(
+                    CACHE_KEY_CHATS,
+                    prevState.chats.map((c) =>
+                      c.id === chatId ? updatedChat : c
+                    )
+                  );
+
+                  return updatedChat;
+                }
+                return chat;
+              });
+
+              return {
+                chats: updatedChats,
+                loading: false,
+              } as LoadedState;
             });
+          }
+        )
+        .subscribe();
 
-            return {
-              chats: updatedChats,
-              loading: false,
-            } as LoadedState;
-          });
-        }
-      )
-      .subscribe();
+      // Subscribe to message seen status changes
+      const seenSubscription = supabase
+        .channel("seen_channel")
+        .on(
+          "postgres_changes",
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "messages",
+            filter: "seen.eq.true",
+          },
+          () => {
+            fetchChats(); // Refresh all chats when messages are marked as seen
+          }
+        )
+        .subscribe();
 
-    // Subscribe to message seen status changes
-    const seenSubscription = supabase
-      .channel("seen_channel")
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "messages",
-          filter: "seen.eq.true",
-        },
-        () => {
-          fetchChats(); // Refresh all chats when messages are marked as seen
-        }
-      )
-      .subscribe();
+      return () => {
+        unsubscribe();
+        chatsSubscription.unsubscribe();
+        messagesSubscription.unsubscribe();
+        seenSubscription.unsubscribe();
+      };
+    }
 
     return () => {
-      chatsSubscription.unsubscribe();
-      messagesSubscription.unsubscribe();
-      seenSubscription.unsubscribe();
+      unsubscribe();
     };
-  }, [user]);
+  }, [user, isOnline]);
 
   return state;
 };

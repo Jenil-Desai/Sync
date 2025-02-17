@@ -8,6 +8,7 @@ module.exports = {
         "custom-lavendar-light": "#dec9e9",
         "custom-lavendar-medium": "#968ec2",
         "custom-lavendar-dark": "#47126B",
+        "custom-skeleton-dark": "#CCC",
       },
     },
   },

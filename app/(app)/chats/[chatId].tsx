@@ -1,12 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import React, { useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
 import ChatScreenHeader from "@/components/headers/chatScreenHeader";
@@ -16,6 +8,7 @@ import { useChat } from "@/hooks/useChats";
 import { useUser } from "@/hooks/useUser";
 import { useMessages } from "@/hooks/useMessages";
 import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
+import { cleanupOldMessages } from "@/utils/offileCache";
 
 export default function ChatScreen() {
   const { chatId } = useLocalSearchParams();
@@ -27,11 +20,11 @@ export default function ChatScreen() {
     onSend,
     markAsSeen,
   } = useMessages(chatId as string);
-  const [isTyping, setIsTyping] = React.useState(false);
 
   useEffect(() => {
     if (!chatLoading && !userLoading && !messagesLoading) {
       markAsSeen();
+      cleanupOldMessages();
     }
   }, [chatLoading, userLoading, messagesLoading]);
 
@@ -46,18 +39,6 @@ export default function ChatScreen() {
   const otherUser =
     chat.user1 === currentUser.id ? chat.user2Details : chat.user1Details;
 
-  // Add this function to handle typing indicator
-  const handleInputTextChanged = (text: string) => {
-    if (text.length > 0) {
-      // Emit typing event to your backend
-      // supabase.channel('typing').send({
-      //   type: 'broadcast',
-      //   event: 'typing',
-      //   payload: { chatId, userId: currentUser.id }
-      // });
-    }
-  };
-
   return (
     <View className="flex-1 bg-white">
       <ChatScreenHeader
@@ -69,7 +50,6 @@ export default function ChatScreen() {
         messages={messages}
         onSend={(messages) => onSend(messages)}
         user={{ _id: currentUser.id }}
-        isTyping={isTyping}
         renderBubble={(props) => (
           <Bubble
             {...props}
@@ -87,10 +67,10 @@ export default function ChatScreen() {
               }
               return (
                 <View style={styles.tickContainer}>
-                  {message.sent && (
+                  {message.sent && !message.received && (
                     <Ionicons name="checkmark" size={14} color={"gray"} />
                   )}
-                  {message.received && (
+                  {message.received && !message.seen && (
                     <View style={{ flexDirection: "row" }}>
                       <Ionicons
                         name="checkmark-done"
@@ -114,7 +94,6 @@ export default function ChatScreen() {
             }}
           />
         )}
-        onInputTextChanged={handleInputTextChanged}
       />
     </View>
   );

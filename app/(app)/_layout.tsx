@@ -7,6 +7,7 @@ import BottomNavigationBar from "@/components/BottomNavigationBar";
 import MenuModal from "@/components/MenuModal";
 import { supabase } from "@/libs/supabase";
 import { User } from "@supabase/supabase-js";
+import { clearOldCache } from "@/utils/offileCache";
 
 export default function AppLayout() {
   const [user, setUser] = useState<User | null>();
@@ -29,6 +30,7 @@ export default function AppLayout() {
     }
 
     getUser();
+    clearOldCache();
 
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
