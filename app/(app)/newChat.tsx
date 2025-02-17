@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { supabase } from "@/libs/supabase";
 import { createChat } from "@/utils/supabaseFunctions";
 
@@ -93,9 +93,9 @@ export default function NewChatScreen() {
             </Text>
             <TextInput
               style={styles.inputField}
-              className="w-full bg-slate-600 px-3 rounded-lg text-lg font-semibold text-white"
+              className="w-full bg-custom-lavendar-light px-3 rounded-lg text-lg font-semibold text-black"
               placeholder="Enter your email"
-              placeholderTextColor={"white"}
+              placeholderTextColor={"black"}
               keyboardType="email-address"
               onChangeText={handleEmailChange}
               value={email}
@@ -105,7 +105,7 @@ export default function NewChatScreen() {
         </View>
         <View>
           <TouchableOpacity
-            className="bg-black px-28 py-5 rounded-lg"
+            className="bg-custom-lavendar-dark px-28 py-5 rounded-lg"
             onPress={signInBtn}
             disabled={loading}
           >

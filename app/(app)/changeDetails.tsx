@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  StyleSheet,
 } from "react-native";
 import React, { useState } from "react";
 import { useUser } from "@/hooks/useUser";
@@ -12,6 +13,7 @@ import { supabase } from "@/libs/supabase";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import { Colors } from "@/constants/Colors";
+import ChangeDetailsScreenHeader from "@/components/headers/ChangeDetailsScreenHeader";
 
 export default function ChangeDetails() {
   const { user, userDetails, loading } = useUser();
@@ -108,58 +110,72 @@ export default function ChangeDetails() {
   };
 
   return (
-    <View className="flex-1 bg-white p-4">
-      <Text className="text-2xl font-bold mb-6">Change Details</Text>
+    <View className="flex-1">
+      <ChangeDetailsScreenHeader />
 
-      <TouchableOpacity onPress={pickImage} className="items-center mb-6">
-        {image ? (
-          <Image source={{ uri: image }} className="w-24 h-24 rounded-full" />
-        ) : (
-          <View className="w-24 h-24 rounded-full bg-gray-200 items-center justify-center">
-            <Text>Add Photo</Text>
+      <View className="p-6">
+        <TouchableOpacity onPress={pickImage} className="items-center mb-6">
+          {image ? (
+            <Image source={{ uri: image }} className="w-24 h-24 rounded-full" />
+          ) : (
+            <View className="w-24 h-24 rounded-full bg-custom-lavendar-light items-center justify-center">
+              <Text>Add Photo</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+
+        <View className="gap-3 mb-14">
+          <View>
+            <Text className="mb-1 text-slate-800 font-semibold text-lg">
+              Full Name
+            </Text>
+            <TextInput
+              style={styles.inputField}
+              className="w-full bg-custom-lavendar-light px-3 rounded-lg text-lg font-semibold text-black"
+              placeholder="Enter full name"
+              placeholderTextColor={"black"}
+              value={fullname}
+              onChangeText={setFullname}
+            />
           </View>
-        )}
-      </TouchableOpacity>
 
-      <View className="space-y-4">
-        <View>
-          <Text className="text-gray-600 mb-1">Full Name</Text>
-          <TextInput
-            className="border border-gray-300 rounded-lg p-3"
-            placeholder="Enter full name"
-            value={fullname}
-            onChangeText={setFullname}
-          />
-        </View>
+          <View>
+            <Text className="mb-1 text-slate-800 font-semibold text-lg">
+              Email
+            </Text>
+            <TextInput
+              style={styles.inputField}
+              className="w-full bg-custom-lavendar-light px-3 rounded-lg text-lg font-semibold text-black"
+              placeholder="Enter email"
+              placeholderTextColor={"black"}
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          </View>
 
-        <View>
-          <Text className="text-gray-600 mb-1">Email</Text>
-          <TextInput
-            className="border border-gray-300 rounded-lg p-3"
-            placeholder="Enter email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-        </View>
-
-        <View>
-          <Text className="text-gray-600 mb-1">New Password</Text>
-          <TextInput
-            className="border border-gray-300 rounded-lg p-3"
-            placeholder="Enter new password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+          <View>
+            <Text className="mb-1 text-slate-800 font-semibold text-lg">
+              New Password
+            </Text>
+            <TextInput
+              style={styles.inputField}
+              className="w-full bg-custom-lavendar-light px-3 rounded-lg text-lg font-semibold text-black"
+              placeholderTextColor={"black"}
+              placeholder="Enter new password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+          </View>
         </View>
 
         <TouchableOpacity
           onPress={handleUpdate}
           disabled={isLoading}
-          className={`rounded-lg p-3 ${
-            isLoading ? "bg-gray-400" : "bg-purple-600"
+          className={`px-28 py-5 rounded-lg ${
+            isLoading ? "bg-gray-400" : "bg-custom-lavendar-dark "
           }`}
         >
           <Text className="text-white text-center font-semibold">
@@ -170,3 +186,8 @@ export default function ChangeDetails() {
     </View>
   );
 }
+const styles = StyleSheet.create({
+  inputField: {
+    height: 60,
+  },
+});
