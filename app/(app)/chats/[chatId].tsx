@@ -29,7 +29,22 @@ export default function ChatScreen() {
   }, [chatLoading, userLoading, messagesLoading]);
 
   if (chatLoading || userLoading || messagesLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View className="flex-1 bg-white">
+        <ChatScreenHeader
+          name={"Loading..."}
+          profilePhotoUrl={"https://avatar.iran.liara.run/public"}
+          status={"online"}
+        />
+        <View className="flex-1 justify-center items-center animate-spin">
+          <SimpleLineIcons
+            name="refresh"
+            size={24}
+            color={Colors.MD_LAVENDAR}
+          />
+        </View>
+      </View>
+    );
   }
 
   if (!chat || !currentUser) {
