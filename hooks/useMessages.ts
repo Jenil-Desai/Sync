@@ -24,7 +24,16 @@ export const useMessages = (chatId: string) => {
     try {
       const { data, error } = await supabase
         .from("messages")
-        .select("*")
+        .select(
+          `
+          *,
+          sender:sender_id (
+            id,
+            fullname,
+            profile_photo_url
+          )
+        `
+        )
         .eq("chat_id", chatId)
         .order("created_at", { ascending: false });
 
@@ -36,7 +45,9 @@ export const useMessages = (chatId: string) => {
               text: msg.message,
               createdAt: new Date(msg.created_at),
               user: {
-                _id: msg.sender_id,
+                _id: msg.sender.id,
+                name: msg.sender.fullname,
+                avatar: msg.sender.profile_photo_url,
               },
             })),
         loading: false,
@@ -48,6 +59,43 @@ export const useMessages = (chatId: string) => {
 
   useEffect(() => {
     fetchMessages();
+
+    const subscription = supabase
+      .channel(`messages_${chatId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "messages",
+          filter: `chat_id=eq.${chatId}`,
+        },
+        (payload) => {
+          if (payload.eventType === "INSERT") {
+            setState((prevState) => ({
+              messages: [
+                {
+                  _id: payload.new.id,
+                  text: payload.new.message,
+                  createdAt: new Date(payload.new.created_at),
+                  user: {
+                    _id: payload.new.sender_id,
+                    name: payload.new.sender.fullname,
+                    avatar: payload.new.sender.profile_photo_url,
+                  },
+                },
+                ...prevState.messages,
+              ],
+              loading: false,
+            }));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [chatId]);
 
   const onSend = async (newMessages: IMessage[] = []) => {
@@ -68,22 +116,8 @@ export const useMessages = (chatId: string) => {
         .select()
         .single();
 
-      if (!error && data) {
-        // Update local state with the new message
-        setState((prevState) => ({
-          messages: [
-            {
-              _id: data.id,
-              text: data.message,
-              createdAt: new Date(data.created_at),
-              user: {
-                _id: data.sender_id,
-              },
-            },
-            ...(prevState.loading ? [] : prevState.messages),
-          ],
-          loading: false,
-        }));
+      if (error) {
+        console.error("Error sending message:", error);
       }
     } catch (error) {
       console.error("Error sending message:", error);

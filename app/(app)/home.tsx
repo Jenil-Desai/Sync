@@ -26,7 +26,7 @@ export default function Home() {
         iconSize={24}
       />
 
-      <View className="flex flex-row justify-start items-center">
+      {/* <View className="flex flex-row justify-start items-center">
         <FlatList
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -51,7 +51,7 @@ export default function Home() {
         titleStyle={"font-medium text-2xl"}
         icon={"options"}
         iconSize={24}
-      />
+      /> */}
       <FlatList
         showsVerticalScrollIndicator={false}
         data={chats}
