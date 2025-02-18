@@ -335,6 +335,7 @@ export const useMessages = (chatId: string) => {
     ...state,
     onSend,
     markAsSeen,
+    setState,
     loading: state.loading,
     isOnline,
   };

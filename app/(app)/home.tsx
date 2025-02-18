@@ -15,8 +15,6 @@ export default function Home() {
     return <Text>Loading...</Text>;
   }
 
-  console.log("chats", chats);
-
   return (
     <View className="flex-1 flex-grow">
       <Header

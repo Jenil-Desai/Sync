@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Alert } from "react-native";
 import React, { useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
 import ChatScreenHeader from "@/components/headers/chatScreenHeader";
@@ -9,6 +9,8 @@ import { useUser } from "@/hooks/useUser";
 import { useMessages } from "@/hooks/useMessages";
 import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 import { cleanupOldMessages } from "@/utils/offileCache";
+import * as Clipboard from "expo-clipboard";
+import { supabase } from "@/libs/supabase";
 
 export default function ChatScreen() {
   const { chatId } = useLocalSearchParams();
@@ -19,6 +21,7 @@ export default function ChatScreen() {
     loading: messagesLoading,
     onSend,
     markAsSeen,
+    setState, // Add setState to update local state
   } = useMessages(chatId as string);
 
   useEffect(() => {
@@ -65,6 +68,58 @@ export default function ChatScreen() {
         messages={messages}
         onSend={(messages) => onSend(messages)}
         user={{ _id: currentUser.id }}
+        onLongPress={(context: any, message: IMessage) => {
+          const options = ["Copy Text", "Delete", "Cancel"];
+          const cancelButtonIndex = options.length - 1;
+          context.actionSheet().showActionSheetWithOptions(
+            {
+              options,
+              cancelButtonIndex,
+            },
+            async (buttonIndex: number) => {
+              switch (buttonIndex) {
+                case 0:
+                  await Clipboard.setStringAsync(message.text);
+                  break;
+
+                case 1:
+                  Alert.alert(
+                    "Delete Message",
+                    "Are you sure you want to delete this message?",
+                    [
+                      {
+                        text: "Cancel",
+                        style: "cancel",
+                      },
+                      {
+                        text: "Delete",
+                        style: "destructive",
+                        onPress: async () => {
+                          try {
+                            console.log("Message : ", message);
+                            const response = await supabase
+                              .from("messages")
+                              .delete()
+                              .eq("id", message._id);
+                            console.log("Response : ", response);
+                            setState((prevState) => ({
+                              messages: prevState.messages.filter(
+                                (msg) => msg._id !== message._id
+                              ),
+                              loading: false,
+                            }));
+                          } catch (error) {
+                            console.error("Error deleting message:", error);
+                          }
+                        },
+                      },
+                    ]
+                  );
+                  break;
+              }
+            }
+          );
+        }}
         renderBubble={(props) => (
           <Bubble
             {...props}
