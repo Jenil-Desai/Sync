@@ -1,11 +1,8 @@
 import ChatListItem from "@/components/ChatListItem";
 import Header from "@/components/headers/Header";
-import Moment from "@/components/Moment";
-import { dummyChats } from "@/constants/Chats";
 import { useChats } from "@/hooks/useChats";
 import { useUser } from "@/hooks/useUser";
-import { SimpleLineIcons } from "@expo/vector-icons";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 
 export default function Home() {
   const { user: currentUser, loading: currentUserLoading } = useUser();
@@ -42,9 +39,9 @@ export default function Home() {
             </TouchableOpacity>
           }
         />
-      </View>
+      </View> */}
 
-      <Header
+      {/* <Header
         title={"Chats"}
         titleStyle={"font-medium text-2xl"}
         icon={"options"}
@@ -66,7 +63,7 @@ export default function Home() {
                 ? item.user2Details.profile_photo_url
                 : item.user1Details.profile_photo_url
             }
-            lastmsg={item.lastMessage?.message}
+            lastmsg={item.lastMessage?.message.replaceAll("\n", "")}
             lastmsgTime={item.lastMessage?.created_at}
             msgCount={item.unseenCount === 0 ? null : item.unseenCount}
           />
