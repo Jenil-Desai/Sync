@@ -61,7 +61,7 @@ export default function Settings() {
             <SimpleLineIcons name="info" size={20} />
             <Text className="text-xl font-semibold">About App</Text>
           </View>
-          <Text className="text-xl font-semibold text-slate-500">v5.0.0</Text>
+          <Text className="text-xl font-semibold text-slate-500">v7.2.2</Text>
         </TouchableOpacity>
 
         <TouchableOpacity

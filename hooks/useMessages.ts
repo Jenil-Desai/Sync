@@ -287,7 +287,7 @@ export const useMessages = (chatId: string) => {
             chat_id: chatId,
             sender_id: message.user._id,
             message: message.text,
-            created_at: new Date().toISOString(), // Fix date format
+            created_at: new Date(),
             seen: false,
           },
         ])
