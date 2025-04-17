@@ -1,50 +1,119 @@
-# Welcome to your Expo app 👋
+# 🔄 Sync
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Sync** is a cross-platform real-time chat application built using React Native and Supabase. Designed for simplicity and seamless communication, Sync lets users securely register, connect, and chat with others — all while syncing chats live and providing read receipts.
 
-## Get started
+---
 
-1. Install dependencies
+## 📑 Table of Contents
 
+1. [Overview](#-overview)
+2. [Technologies](#-technologies)
+3. [Packages & Libraries](#-packages--libraries)
+4. [Getting Started](#-getting-started)
+5. [Setup](#-setup)
+6. [Features](#-features)
+7. [Demo & Screenshots](#-demo--screenshots)
+8. [Acknowledgments](#-acknowledgments)
+9. [License](#-license)
+
+---
+
+## 🌟 Overview
+
+Sync provides a secure and smooth chat experience for users with the ability to:
+- Create an account
+- Edit account details with profile picture
+- Start one-on-one chats via email
+- Enjoy real-time message syncing with read receipts
+- Delete individual messages
+
+Powered by Supabase for backend and authentication, Sync is ideal for modern mobile communication.
+
+---
+
+## 💻 Technologies
+
+| Technology       | Description                                |
+|------------------|--------------------------------------------|
+| TypeScript       | Language used for type safety              |
+| React Native     | Framework for building mobile apps         |
+| Supabase         | Backend as a service for DB + Auth + Realtime |
+
+---
+
+## 📦 Packages / Libraries Used
+
+- **Expo**
+- **tailwindcss** + **nativewind** – for styling
+- **recoil** – state management
+- **expo-clipboard** – clipboard utilities
+- **expo-image-picker** – image selection for profile pic
+- **@react-navigation/native** – navigation
+- **@react-navigation/bottom-tabs** – tab navigation
+- **@react-native-async-storage/async-storage** – local storage
+- **react-native-get-random-values** – UUID support
+- **react-native-gifted-chat** – beautiful UI for chat
+
+---
+
+## 🚀 Getting Started
+
+> Make sure you have Git, Node.js, and Expo CLI installed on your system.
+
+---
+
+## ⚙️ Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Jenil-Desai/sync.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd sync
+   ```
+3. Install dependencies:
    ```bash
    npm install
    ```
-
-2. Start the app
-
+4. Start the project:
    ```bash
-    npx expo start
+   npm start
    ```
+5. Scan the QR code with your Expo Go app or launch the simulator.
 
-In the output, you'll find options to open the app in a
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 🎯 Features
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- 🔐 **Create Account** with full name, email, and password
+- 🔑 **Login** with registered credentials
+- 🧑 **Edit Profile** – change name, email, password, and profile picture
+- 💬 **One-on-One Chat** – start chats via email
+- 👀 **Read Receipts** – see when messages are read
+- 🔄 **Real-time Messaging** with Supabase Realtime
+- 🗑️ **Delete Messages**
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## 📸 Demo & Screenshots
 
-```bash
-npm run reset-project
-```
+_To be added._
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## 🙏 Acknowledgments
 
-To learn more about developing your project with Expo, look at the following resources:
+1. [Supabase Realtime Docs](https://supabase.com/docs/guides/realtime)
+2. [Supabase Authentication Docs](https://supabase.com/docs/guides/auth)
+3. [Gifted Chat Documentation](https://github.com/FaridSafi/react-native-gifted-chat)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## 📜 License
 
-Join our community of developers creating universal apps.
+This project is licensed under the **MIT License**.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
+
+> Built with 💬 and ☁️ using React Native + Supabase
