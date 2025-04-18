@@ -98,7 +98,9 @@ Powered by Supabase for backend and authentication, Sync is ideal for modern mob
 
 ## 📸 Demo & Screenshots
 
-_To be added._
+| Mockup                              | Welcome Screen                               | Register Screen                                | Login Screen                             | Chat List Screen                                 | Chat Screen                            | Settings Screen                                |
+|-------------------------------------|----------------------------------------------|------------------------------------------------|------------------------------------------|--------------------------------------------------|----------------------------------------|------------------------------------------------|
+| ![Mockup](./screenshots/mockup.png) | ![Welcome Screen](./screenshots/welcome.png) | ![Register Screen](./screenshots/register.png) | ![Login Screen](./screenshots/login.png) | ![Chat List Screen](./screenshots/chat-list.png) | ![Chat Screen](./screenshots/chat.png) | ![Settings Screen](./screenshots/settings.png) |
 
 ---
 
